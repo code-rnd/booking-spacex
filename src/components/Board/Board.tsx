@@ -1,34 +1,27 @@
 import { FC, useCallback, useState, DragEvent, useEffect } from "react";
 
 import { BOARDS_MOCKED } from "../../mocked/constants.const";
-import { BoardModel, TicketModel } from "../../mocked/type.model";
-
-import { useDispatch, useSelector } from "react-redux";
-import { setStatus } from "../../store/sliceLaunches";
+import { BoardModel } from "../../mocked/type.model";
+import {
+  getLaunches,
+  LaunchModel,
+  useAppDispatch,
+  useAppSelector,
+} from "../../store";
 
 import s from "./Board.module.scss";
 
 export const Board: FC = () => {
-  const status = useSelector((state: any) => state.launches);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setStatus({ status: true }));
-  }, [dispatch]);
-
   const [boards, setBoards] = useState(BOARDS_MOCKED);
-  const [currentBoard, setCurrentBoard] = useState<BoardModel | undefined>(
-    undefined
-  );
-  const [currentTicket, setCurrentTicket] = useState<TicketModel | undefined>(
-    undefined
-  );
+  const [currentBoard, setCurrentBoard] = useState<BoardModel>();
+  const [currentTicket, setCurrentTicket] = useState<LaunchModel>();
 
   const drugOverHandle = useCallback((e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   }, []);
 
   const drugStartHandle = useCallback(
-    (e: DragEvent<HTMLDivElement>, board: BoardModel, ticket: TicketModel) => {
+    (e: DragEvent<HTMLDivElement>, board: BoardModel, ticket: LaunchModel) => {
       setCurrentBoard(board);
       setCurrentTicket(ticket);
     },
@@ -42,11 +35,11 @@ export const Board: FC = () => {
       if (!currentBoard || !currentTicket || board.id === currentBoard.id)
         return;
 
-      const nextList = [...currentBoard.list];
+      let nextList = [...currentBoard.list];
       const currentIndex = nextList.indexOf(currentTicket);
       /** Удаляю элемент из одного массива */
       nextList.splice(currentIndex, 1);
-      const prevList = [...board.list];
+      let prevList = [...board.list];
       /** Добавляю элемент в другой массив */
       prevList.push(currentTicket);
       /** Обновляю состояние новыми данными */
@@ -71,19 +64,21 @@ export const Board: FC = () => {
       if (!currentBoard || !currentTicket || board.id === currentBoard.id)
         return;
 
+      let nextList = [...currentBoard.list];
       const currentIndex = currentBoard.list.indexOf(currentTicket);
       /** Удаляю элемент из одного массива */
-      currentBoard.list.splice(currentIndex, 1);
+      nextList.splice(currentIndex, 1);
       /** Добавляю элемент в другой массив */
-      board.list.push(currentTicket);
+      let prevList = [...board.list];
+      prevList.push(currentTicket);
       /** Обновляю состояние новыми данными */
       setBoards(
         boards.map((b) => {
           if (b.id === board.id) {
-            return board;
+            return { ...board, list: prevList };
           }
           if (b.id === currentBoard.id) {
-            return currentBoard;
+            return { ...currentBoard, list: nextList };
           }
           return b;
         })
@@ -91,6 +86,17 @@ export const Board: FC = () => {
     },
     [currentTicket, currentBoard]
   );
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getLaunches());
+  }, []);
+  const launches = useAppSelector((state) => state.launches.launchesData.docs);
+  useEffect(() => {
+    const next = [...boards];
+    next[1].list = launches;
+    setBoards(next);
+  }, [launches]);
 
   return (
     <div className={s.container}>
@@ -112,7 +118,7 @@ export const Board: FC = () => {
                 className={s.item}
                 key={ticket.id}
               >
-                {ticket.title}
+                {ticket.name}
               </div>
             ))}
           </div>

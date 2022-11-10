@@ -9,7 +9,7 @@ export const TICKETS_MOCKED: TicketModel[] = [
   { id: 6, title: "Шестой билет" },
 ];
 export const BOARDS_MOCKED: BoardModel[] = [
-  { id: 1, title: "Завершенная поездка", list: [...TICKETS_MOCKED] },
+  { id: 1, title: "Завершенная поездка", list: [] },
   { id: 2, title: "Доступный билет", list: [] },
   { id: 3, title: "Купленный билет", list: [] },
 ];

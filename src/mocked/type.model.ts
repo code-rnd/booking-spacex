@@ -1,7 +1,9 @@
+import { LaunchModel } from "../store";
+
 export interface BoardModel {
   id: number;
   title: string;
-  list: TicketModel[];
+  list: LaunchModel[];
 }
 
 export interface TicketModel {
