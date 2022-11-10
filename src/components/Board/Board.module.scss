@@ -1,0 +1,36 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.board {
+  border: 1px solid black;
+  text-align: center;
+
+  padding: 10px;
+}
+
+.title {
+
+}
+
+.list {
+
+}
+
+.item {
+  padding: 5px;
+  text-align: center;
+
+  cursor: pointer;
+  transition: all .3s;
+
+  &:not(:last-child) {
+    margin-bottom: 5px;
+  }
+
+  &:hover {
+    transition: all .3s;
+    background-color: gray;
+  }
+}

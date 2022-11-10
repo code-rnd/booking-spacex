@@ -1,9 +1,15 @@
 import React from "react";
+import { Provider } from "react-redux";
 
-import { View } from "./components";
+import { Board } from "./components";
+import { store } from "./store";
 
 import "./App.style.scss";
 
 export const App = () => {
-  return <View>SpaceX</View>;
+  return (
+    <Provider store={store}>
+      <Board />
+    </Provider>
+  );
 };
