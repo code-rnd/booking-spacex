@@ -1,4 +1,5 @@
 import { FC, useCallback, useState, DragEvent, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { BOARDS_MOCKED } from "../../mocked/constants.const";
 import { BoardModel } from "../../mocked/type.model";
@@ -15,6 +16,8 @@ export const Board: FC = () => {
   const [boards, setBoards] = useState(BOARDS_MOCKED);
   const [currentBoard, setCurrentBoard] = useState<BoardModel>();
   const [currentTicket, setCurrentTicket] = useState<LaunchModel>();
+
+  const navigate = useNavigate();
 
   const drugOverHandle = useCallback((e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -109,8 +112,9 @@ export const Board: FC = () => {
         >
           <div className={s.title}>{board.title}</div>
           <div className={s.list}>
-            {Array.from(board.list).map((ticket) => (
+            {board.list.map((ticket) => (
               <div
+                onClick={() => navigate("/card/" + ticket.id)}
                 onDragOver={drugOverHandle}
                 onDragStart={(e) => drugStartHandle(e, board, ticket)}
                 onDrop={(e) => dropHandle(e, board)}
