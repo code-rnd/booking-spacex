@@ -1,13 +1,14 @@
 import { FC, useCallback, useState, DragEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { BoardModel } from "../../mocked/type.model";
 import {
   LaunchModel,
   setBoards,
+  setCurrentCard,
   useAppDispatch,
   useAppSelector,
 } from "../../store";
+import { BoardModel } from "../../shared";
 
 import s from "./Board.module.scss";
 
@@ -16,18 +17,25 @@ export const Board: FC = () => {
   const dispatch = useAppDispatch();
   const boards = useAppSelector((state) => state.launches.boards);
   const [currentBoard, setCurrentBoard] = useState<BoardModel>();
-  const [currentTicket, setCurrentTicket] = useState<LaunchModel>();
+  const [currentLaunch, setCurrentLaunch] = useState<LaunchModel>();
 
   const navigate = useNavigate();
+  const goToCardHandle = useCallback(
+    (launch: LaunchModel) => {
+      dispatch(setCurrentCard({ card: launch }));
+      navigate("/card/" + launch.id);
+    },
+    [dispatch, navigate]
+  );
 
   const drugOverHandle = useCallback((e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   }, []);
 
   const drugStartHandle = useCallback(
-    (e: DragEvent<HTMLDivElement>, board: BoardModel, ticket: LaunchModel) => {
+    (e: DragEvent<HTMLDivElement>, board: BoardModel, launch: LaunchModel) => {
       setCurrentBoard(board);
-      setCurrentTicket(ticket);
+      setCurrentLaunch(launch);
     },
     []
   );
@@ -36,16 +44,16 @@ export const Board: FC = () => {
     (e: DragEvent<HTMLDivElement>, board: BoardModel) => {
       e.preventDefault();
 
-      if (!currentBoard || !currentTicket || board.id === currentBoard.id)
+      if (!currentBoard || !currentLaunch || board.id === currentBoard.id)
         return;
 
       let nextList = [...currentBoard.list];
-      const currentIndex = nextList.indexOf(currentTicket);
+      const currentIndex = nextList.indexOf(currentLaunch);
       /** Удаляю элемент из одного массива */
       nextList.splice(currentIndex, 1);
       let prevList = [...board.list];
       /** Добавляю элемент в другой массив */
-      prevList.push(currentTicket);
+      prevList.push(currentLaunch);
       /** Обновляю состояние новыми данными */
       dispatch(
         setBoards({
@@ -61,22 +69,22 @@ export const Board: FC = () => {
         })
       );
     },
-    [currentBoard, currentTicket, boards]
+    [currentBoard, currentLaunch, boards, dispatch]
   );
 
   const dropBoardHandle = useCallback(
     (e: DragEvent<HTMLDivElement>, board: BoardModel) => {
       e.preventDefault();
-      if (!currentBoard || !currentTicket || board.id === currentBoard.id)
+      if (!currentBoard || !currentLaunch || board.id === currentBoard.id)
         return;
 
       let nextList = [...currentBoard.list];
-      const currentIndex = currentBoard.list.indexOf(currentTicket);
+      const currentIndex = currentBoard.list.indexOf(currentLaunch);
       /** Удаляю элемент из одного массива */
       nextList.splice(currentIndex, 1);
       /** Добавляю элемент в другой массив */
       let prevList = [...board.list];
-      prevList.push(currentTicket);
+      prevList.push(currentLaunch);
       /** Обновляю состояние новыми данными */
       dispatch(
         setBoards({
@@ -92,7 +100,7 @@ export const Board: FC = () => {
         })
       );
     },
-    [currentTicket, currentBoard, boards]
+    [currentLaunch, currentBoard, boards, dispatch]
   );
 
   return (
@@ -106,17 +114,17 @@ export const Board: FC = () => {
         >
           <div className={s.title}>{board.title}</div>
           <div className={s.list}>
-            {board.list.map((ticket) => (
+            {board.list.map((launch) => (
               <div
-                onClick={() => navigate("/card/" + ticket.id)}
+                onClick={() => goToCardHandle(launch)}
                 onDragOver={drugOverHandle}
-                onDragStart={(e) => drugStartHandle(e, board, ticket)}
+                onDragStart={(e) => drugStartHandle(e, board, launch)}
                 onDrop={(e) => dropHandle(e, board)}
                 draggable={!board.isViewMode}
                 className={s.item}
-                key={ticket.id}
+                key={launch.id}
               >
-                {ticket.name}
+                {launch.name}
               </div>
             ))}
           </div>

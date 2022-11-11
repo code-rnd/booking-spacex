@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from "react";
 import { ApiLaunches, LaunchModel, mapperLaunchDtoToLaunch } from "../../store";
 import { useParams } from "react-router-dom";
 
+/** TODO: В данной реализации не используется
+ *  Хук для фетча открытой карточки */
 export const useCurrentCard = (): [LaunchModel | undefined, boolean] => {
   const { id } = useParams<{ id: string }>();
 

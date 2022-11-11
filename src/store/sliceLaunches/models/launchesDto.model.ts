@@ -1,24 +1,6 @@
-import { BoardModel } from "../../mocked/type.model";
-
-export interface SliceLaunchesStateModel {
-  boards: BoardModel[];
-  launches: LaunchModel[];
-
-  isLoading: boolean;
-  error: any;
-}
-export type LaunchStatuses = "past" | "available" | "booked"; // Завершен, Свободен, Куплен
-export interface LaunchModel {
-  id: string;
-  name: string;
-  description: string;
-  status: LaunchStatuses;
-  links: Links;
-}
-
 /** types gen http://json2ts.com/
- *  TODO: Првести в camelCase */
-
+ *  TODO: Бек и фронт должны работать в одном стиле
+ *  (в данном случае с бэка должно приходить camelCase) */
 export interface LaunchDto {
   fairings: Fairings;
   links: Links;

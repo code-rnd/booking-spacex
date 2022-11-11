@@ -1,13 +1,17 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card as AntCard, PageHeader, Image } from "antd";
-import { useCurrentCard } from "./Card.hooks";
+
+import { useAppSelector } from "../../store";
 import s from "./Card.module.scss";
 
 const { Meta } = AntCard;
 
+/** TODO: Для актуальности данных, карточку нужно фетчить ппри переходе в нее,
+ *  так как апи не повзоляет осуществить весь CRUD, карточка передается через глобальное хранилище редакс */
 export const Card: FC = () => {
-  const [card, pending] = useCurrentCard();
+  const card = useAppSelector((state) => state.launches.currentCard);
+  const pending = useAppSelector((state) => state.launches.isLoading);
   const navigate = useNavigate();
 
   const { name, links } = card || {};

@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
-import { LaunchDto } from "./sliceLaunches.model";
-import { httpClient } from "../../http/http-client";
+
+import { httpClient } from "../../http";
+import { LaunchDto } from "./models";
 
 export class ApiLaunches {
   public static getAllLaunches(): Promise<AxiosResponse<LaunchDto[]>> {
