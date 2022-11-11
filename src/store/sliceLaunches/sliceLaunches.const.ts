@@ -8,9 +8,9 @@ export const initialState: SliceLaunchesStateModel = {
 };
 
 export const LAUNCH_STATUSES: LaunchStatuses[] = [
-  "past",
-  "available",
-  "booked",
+  "past", // завершено
+  "available", // доступно
+  "booked", // забронировано
 ];
 
 export const LAUNCHES_PREFIX = "launches";

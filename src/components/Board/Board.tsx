@@ -1,5 +1,6 @@
 import { FC, useCallback, useState, DragEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { notification } from "antd";
 
 import {
   LaunchModel,
@@ -43,6 +44,25 @@ export const Board: FC = () => {
   const dropHandle = useCallback(
     (e: DragEvent<HTMLDivElement>, board: BoardModel) => {
       e.preventDefault();
+
+      const isMakeReservation =
+        currentBoard?.title === "available" && board?.title === "booked";
+      const isCancelBooking =
+        currentBoard?.title === "booked" && board?.title === "available";
+
+      if (isMakeReservation) {
+        notification.open({
+          message: "Забронировано!",
+          description: "Билет в " + currentLaunch?.name + " - забронирован!",
+        });
+      }
+
+      if (isCancelBooking) {
+        notification.open({
+          message: "Отмена бронирования!",
+          description: "Бронь на " + currentLaunch?.name + " - снята!",
+        });
+      }
 
       if (!currentBoard || !currentLaunch || board.id === currentBoard.id)
         return;
