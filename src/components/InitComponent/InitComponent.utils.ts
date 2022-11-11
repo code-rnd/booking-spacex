@@ -1,6 +1,8 @@
 import { LaunchModel } from "../../store";
 import { BoardModel } from "../../shared";
 
+/** Инициалзиация полного списка данных для досок
+ *  TODO: Сделано из-за того, что бекенд не дает осуществлять полный CRUD */
 export const initiBoards = (list: LaunchModel[]): BoardModel[] => {
   return [
     {

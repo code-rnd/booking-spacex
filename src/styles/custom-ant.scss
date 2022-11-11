@@ -1,0 +1,17 @@
+// Переопределение стилей антовской библиотеки
+
+li {
+  cursor: pointer !important;
+}
+
+.ant-list-item-meta .ant-list-item-meta-description {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ant-list,
+.ant-list-split {
+  height: calc(100% - 33px);
+  overflow: scroll;
+}
