@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { ApiLaunches, LaunchModel } from "../../store";
+import { ApiLaunches, LaunchModel, mapperLaunchDtoToLaunch } from "../../store";
 import { useParams } from "react-router-dom";
 
 export const useCurrentCard = (): [LaunchModel | undefined, boolean] => {
@@ -15,7 +15,9 @@ export const useCurrentCard = (): [LaunchModel | undefined, boolean] => {
     setPending(true);
     try {
       const { data } = await ApiLaunches.getLaunch(id);
-      setCard(data);
+
+      const preparedData = mapperLaunchDtoToLaunch(data) as LaunchModel;
+      setCard(preparedData);
     } catch (e) {
       console.error(e);
     } finally {

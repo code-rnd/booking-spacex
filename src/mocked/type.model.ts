@@ -1,12 +1,9 @@
-import { LaunchModel } from "../store";
+import { LaunchModel, LaunchStatuses } from "../store";
 
+/** TODO: Вынести */
 export interface BoardModel {
   id: number;
-  title: string;
+  title: LaunchStatuses;
   list: LaunchModel[];
-}
-
-export interface TicketModel {
-  id: number;
-  title: string;
+  isViewMode?: boolean;
 }

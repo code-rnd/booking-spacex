@@ -1,26 +1,54 @@
+import { BoardModel } from "../../mocked/type.model";
+
 export interface SliceLaunchesStateModel {
-  launchesData: GetLaunchesResponse;
-  currentLaunch?: LaunchModel;
+  boards: BoardModel[];
+  launches: LaunchModel[];
 
   isLoading: boolean;
   error: any;
 }
-
-export interface GetLaunchesResponse {
-  docs: LaunchModel[];
-  totalDocs: number;
-  offset: number;
-  limit: number;
-  totalPages: number;
-  page: number;
-  pagingCounter: number;
-  hasPrevPage: boolean;
-  hasNextPage: boolean;
-  prevPage: number;
-  nextPage: number;
+export type LaunchStatuses = "past" | "available" | "booked"; // Завершен, Свободен, Куплен
+export interface LaunchModel {
+  id: string;
+  name: string;
+  description: string;
+  status: LaunchStatuses;
+  links: Links;
 }
 
-/** types gen http://json2ts.com/ */
+/** types gen http://json2ts.com/
+ *  TODO: Првести в camelCase */
+
+export interface LaunchDto {
+  fairings: Fairings;
+  links: Links;
+  static_fire_date_utc: Date;
+  static_fire_date_unix: number;
+  net: boolean;
+  window: number;
+  rocket: string;
+  success: boolean;
+  failures: Failure[];
+  details: string;
+  crew: any[];
+  ships: any[];
+  capsules: any[];
+  payloads: string[];
+  launchpad: string;
+  flight_number: number;
+  name: string;
+  date_utc: Date;
+  date_unix: number;
+  date_local: Date;
+  date_precision: string;
+  upcoming: boolean;
+  cores: Core[];
+  auto_update: boolean;
+  tbd: boolean;
+  launch_library_id?: any;
+  id: string;
+}
+
 export interface Fairings {
   reused: boolean;
   recovery_attempt: boolean;
@@ -72,34 +100,4 @@ export interface Core {
   landing_success?: any;
   landing_type?: any;
   landpad?: any;
-}
-
-export interface LaunchModel {
-  fairings: Fairings;
-  links: Links;
-  static_fire_date_utc: Date;
-  static_fire_date_unix: number;
-  net: boolean;
-  window: number;
-  rocket: string;
-  success: boolean;
-  failures: Failure[];
-  details: string;
-  crew: any[];
-  ships: any[];
-  capsules: any[];
-  payloads: string[];
-  launchpad: string;
-  flight_number: number;
-  name: string;
-  date_utc: Date;
-  date_unix: number;
-  date_local: Date;
-  date_precision: string;
-  upcoming: boolean;
-  cores: Core[];
-  auto_update: boolean;
-  tbd: boolean;
-  launch_library_id?: any;
-  id: string;
 }

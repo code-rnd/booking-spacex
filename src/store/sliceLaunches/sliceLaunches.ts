@@ -1,40 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { initialState } from "./sliceLaunches.const";
-import { getLaunch, getLaunches } from "./sliceLaunches.thunks";
+import { getAllLaunches } from "./sliceLaunches.thunks";
+import { LaunchModel } from "./sliceLaunches.model";
 
 const sliceLaunches = createSlice({
   initialState,
   reducers: {
-    setStatus(state, action) {
-      state.isLoading = action.payload.isLoading;
+    setBoards(state, action) {
+      state.boards = action.payload.boards;
     },
   },
   name: "launches",
   extraReducers: (builder) => {
     /** getLaunches */
-    builder.addCase(getLaunches.pending, (state) => {
+    builder.addCase(getAllLaunches.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(getLaunches.fulfilled, (state, action) => {
+    builder.addCase(getAllLaunches.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.launchesData = action.payload;
+      state.launches = action.payload as LaunchModel[];
     });
-    builder.addCase(getLaunches.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    });
-
-    /** getLaunch */
-    builder.addCase(getLaunch.pending, (state) => {
-      state.isLoading = true;
-      state.error = null;
-    });
-    builder.addCase(getLaunch.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.currentLaunch = action.payload;
-    });
-    builder.addCase(getLaunch.rejected, (state, action) => {
+    builder.addCase(getAllLaunches.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     });
@@ -42,4 +29,4 @@ const sliceLaunches = createSlice({
 });
 
 export const launches = sliceLaunches.reducer;
-export const { setStatus } = sliceLaunches.actions;
+export const { setBoards } = sliceLaunches.actions;

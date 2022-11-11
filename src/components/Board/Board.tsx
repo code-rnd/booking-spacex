@@ -1,19 +1,20 @@
-import { FC, useCallback, useState, DragEvent, useEffect } from "react";
+import { FC, useCallback, useState, DragEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { BOARDS_MOCKED } from "../../mocked/constants.const";
 import { BoardModel } from "../../mocked/type.model";
 import {
-  getLaunches,
   LaunchModel,
+  setBoards,
   useAppDispatch,
   useAppSelector,
 } from "../../store";
 
 import s from "./Board.module.scss";
 
+/** TODO: Стилизовать по Ant */
 export const Board: FC = () => {
-  const [boards, setBoards] = useState(BOARDS_MOCKED);
+  const dispatch = useAppDispatch();
+  const boards = useAppSelector((state) => state.launches.boards);
   const [currentBoard, setCurrentBoard] = useState<BoardModel>();
   const [currentTicket, setCurrentTicket] = useState<LaunchModel>();
 
@@ -46,19 +47,21 @@ export const Board: FC = () => {
       /** Добавляю элемент в другой массив */
       prevList.push(currentTicket);
       /** Обновляю состояние новыми данными */
-      setBoards(
-        boards.map((b) => {
-          if (b.id === board.id) {
-            return { ...board, list: prevList };
-          }
-          if (b.id === currentBoard.id) {
-            return { ...currentBoard, list: nextList };
-          }
-          return b;
+      dispatch(
+        setBoards({
+          boards: boards.map((b) => {
+            if (b.id === board.id) {
+              return { ...board, list: prevList };
+            }
+            if (b.id === currentBoard.id) {
+              return { ...currentBoard, list: nextList };
+            }
+            return b;
+          }),
         })
       );
     },
-    [currentBoard, currentTicket]
+    [currentBoard, currentTicket, boards]
   );
 
   const dropBoardHandle = useCallback(
@@ -75,31 +78,22 @@ export const Board: FC = () => {
       let prevList = [...board.list];
       prevList.push(currentTicket);
       /** Обновляю состояние новыми данными */
-      setBoards(
-        boards.map((b) => {
-          if (b.id === board.id) {
-            return { ...board, list: prevList };
-          }
-          if (b.id === currentBoard.id) {
-            return { ...currentBoard, list: nextList };
-          }
-          return b;
+      dispatch(
+        setBoards({
+          boards: boards.map((b) => {
+            if (b.id === board.id) {
+              return { ...board, list: prevList };
+            }
+            if (b.id === currentBoard.id) {
+              return { ...currentBoard, list: nextList };
+            }
+            return b;
+          }),
         })
       );
     },
-    [currentTicket, currentBoard]
+    [currentTicket, currentBoard, boards]
   );
-
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(getLaunches());
-  }, []);
-  const launches = useAppSelector((state) => state.launches.launchesData.docs);
-  useEffect(() => {
-    const next = [...boards];
-    next[1].list = launches;
-    setBoards(next);
-  }, [launches]);
 
   return (
     <div className={s.container}>
@@ -118,7 +112,7 @@ export const Board: FC = () => {
                 onDragOver={drugOverHandle}
                 onDragStart={(e) => drugStartHandle(e, board, ticket)}
                 onDrop={(e) => dropHandle(e, board)}
-                draggable
+                draggable={!board.isViewMode}
                 className={s.item}
                 key={ticket.id}
               >

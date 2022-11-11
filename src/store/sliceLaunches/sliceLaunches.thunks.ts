@@ -1,14 +1,24 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+
 import { ApiLaunches } from "./launches.controller";
 import { LAUNCHES_PREFIX } from "./sliceLaunches.const";
+import { mapperLaunchDtoToLaunch } from "./sliceLaunches.utils";
+import { setBoards } from "./sliceLaunches";
+import { initiBoards } from "../../components";
+import { LaunchModel } from "./sliceLaunches.model";
 
-export const getLaunches = createAsyncThunk(
-  LAUNCHES_PREFIX + "/getLaunches/query",
-  async (_, { rejectWithValue }) => {
+/** TODO: Привести в порядок стор, карточки хранить локально, доски в сторе, а лаунчи нигде не хранить */
+
+export const getAllLaunches = createAsyncThunk(
+  LAUNCHES_PREFIX + "/getAllLaunches",
+  async (_, { rejectWithValue, dispatch }) => {
     try {
-      const { data } = await ApiLaunches.getLaunches({});
+      const { data } = await ApiLaunches.getAllLaunches();
+      const prepareData = mapperLaunchDtoToLaunch(data) as LaunchModel[];
+      const boards = initiBoards(prepareData);
+      dispatch(setBoards({ boards }));
 
-      return data;
+      return prepareData;
     } catch (e) {
       // @ts-ignore
       return rejectWithValue(e.message);
