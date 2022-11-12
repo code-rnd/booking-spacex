@@ -16,7 +16,7 @@ export const Card: FC = () => {
   return (
     <div className={s.container}>
       <AntCard type="inner" title={name} loading={isLoading}>
-        <Image preview={false} width={250} src={links?.patch?.large} />
+        <Image preview={false} width={250} src={links?.patch?.small} />
         <Descriptions title={name}>
           <Descriptions.Item label="Youtube">
             <a href={"https://www.youtube.com/watch?v=" + links?.youtube_id}>
@@ -24,16 +24,16 @@ export const Card: FC = () => {
             </a>
           </Descriptions.Item>
           <Descriptions.Item label="Wikipedia">
-            <a href={wikipedia || ""}>Wikipedia</a>
+            <a href={wikipedia || "#"}>Wikipedia</a>
           </Descriptions.Item>
           <Descriptions.Item label="Presskit">
-            <a href={presskit || ""}>Presskit</a>
+            <a href={presskit || "#"}>Presskit</a>
           </Descriptions.Item>
           <Descriptions.Item label="Webcast">
-            <a href={webcast || ""}>Webcast</a>
+            <a href={webcast || "#"}>Webcast</a>
           </Descriptions.Item>
           <Descriptions.Item label="Article">
-            <a href={article || ""}>Article</a>
+            <a href={article || "#"}>Article</a>
           </Descriptions.Item>
         </Descriptions>
       </AntCard>

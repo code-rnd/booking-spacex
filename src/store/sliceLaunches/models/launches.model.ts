@@ -1,8 +1,7 @@
 import { Links } from "./launchesDto.model";
-import { BoardModel } from "../../../shared";
 
 export interface SliceLaunchesStateModel {
-  boards: BoardModel[];
+  launches: LaunchModel[];
   currentCard?: LaunchModel;
 
   isLoading: boolean;

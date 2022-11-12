@@ -2,22 +2,16 @@ import { FC, useCallback, useState, DragEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { List, Avatar } from "antd";
 
-import {
-  LaunchModel,
-  setCurrentCard,
-  useAppDispatch,
-  useAppSelector,
-} from "../../../store";
+import { LaunchModel, setCurrentCard, useAppDispatch } from "../../../store";
 import { BoardModel } from "../../../shared";
+import { useBoardsController, useBoardsNotifications } from "./hooks";
 
 import s from "./Board.module.scss";
-import { useBoardsController, useBoardsNotifications } from "./Board.hooks";
 
 export const Board: FC = () => {
   const dispatch = useAppDispatch();
-  const boards = useAppSelector((state) => state.launches.boards);
 
-  const changeLaunch = useBoardsController();
+  const { updateLaunch, boards } = useBoardsController();
   const showNotification = useBoardsNotifications();
 
   const [currentBoard, setCurrentBoard] = useState<BoardModel>();
@@ -48,39 +42,34 @@ export const Board: FC = () => {
     (e: DragEvent<HTMLDivElement>, board: BoardModel) => {
       e.preventDefault();
 
-      if (!currentBoard || !currentLaunch || board.id === currentBoard.id)
+      if (
+        !currentBoard ||
+        !currentLaunch ||
+        board.id === currentBoard.id ||
+        board.title === "past"
+      )
         return;
 
-      changeLaunch({
-        currentBoard,
-        currentLaunch,
-        board,
-      });
+      updateLaunch(currentLaunch);
     },
-    [currentBoard, currentLaunch, boards, dispatch, changeLaunch]
+    [currentBoard, currentLaunch, updateLaunch]
   );
 
   const dropBoardHandle = useCallback(
     (e: DragEvent<HTMLDivElement>, board: BoardModel) => {
       e.preventDefault();
-      if (!currentBoard || !currentLaunch || board.id === currentBoard.id)
+      if (
+        !currentBoard ||
+        !currentLaunch ||
+        board.id === currentBoard.id ||
+        board.title === "past"
+      )
         return;
 
       showNotification({ currentBoard, currentLaunch, board });
-      changeLaunch({
-        currentBoard,
-        currentLaunch,
-        board,
-      });
+      updateLaunch(currentLaunch);
     },
-    [
-      currentLaunch,
-      currentBoard,
-      boards,
-      dispatch,
-      changeLaunch,
-      showNotification,
-    ]
+    [currentLaunch, currentBoard, showNotification, updateLaunch]
   );
 
   return (

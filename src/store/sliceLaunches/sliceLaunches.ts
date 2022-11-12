@@ -5,8 +5,8 @@ import { getAllLaunches } from "./sliceLaunches.thunks";
 const sliceLaunches = createSlice({
   initialState,
   reducers: {
-    setBoards(state, action) {
-      state.boards = action.payload.boards;
+    setLaunches(state, action) {
+      state.launches = action.payload.launches;
     },
     setCurrentCard(state, action) {
       state.currentCard = action.payload.card;
@@ -14,12 +14,13 @@ const sliceLaunches = createSlice({
   },
   name: "launches",
   extraReducers: (builder) => {
-    /** getLaunches */
+    /** getAllLaunches */
     builder.addCase(getAllLaunches.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(getAllLaunches.fulfilled, (state) => {
+    builder.addCase(getAllLaunches.fulfilled, (state, action) => {
+      state.launches = action.payload.launches;
       state.isLoading = false;
     });
     builder.addCase(getAllLaunches.rejected, (state, action) => {
@@ -30,4 +31,4 @@ const sliceLaunches = createSlice({
 });
 
 export const launches = sliceLaunches.reducer;
-export const { setBoards, setCurrentCard } = sliceLaunches.actions;
+export const { setCurrentCard, setLaunches } = sliceLaunches.actions;
