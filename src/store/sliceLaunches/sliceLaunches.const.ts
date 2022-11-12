@@ -1,7 +1,7 @@
 import { LaunchStatuses, SliceLaunchesStateModel } from "./models";
 
 export const initialState: SliceLaunchesStateModel = {
-  boards: [],
+  launches: [],
 
   isLoading: false,
   error: null,
