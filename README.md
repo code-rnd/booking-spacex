@@ -2,7 +2,7 @@
 
 Проект собран с помощью: `CRA (craete react app)`
 
-Цель: Написать сервис бронирования билетов
+Цель: Написать сервис бронирования билетов, используя `drug-and-drop` между колонками
 
 Инструменты: `react` / `ts` / `hooks` / `redux` / `ant` / `scss modules` / `axios` / `reduxjs-toolkit`
 
