@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { notification } from "antd";
 
-import { BoardModel } from "../../../../shared";
-import { LaunchModel } from "../../../../store";
+import { BoardModel } from "../../../shared";
+import { LaunchModel } from "../../../store";
 
 interface ShowNotificationProps {
   currentBoard: BoardModel;

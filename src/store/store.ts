@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { launches } from "./sliceLaunches";
 
-import { StoreModel } from "./store.model";
+import { launchesReducer as launches } from "./slices/launches";
 
-export const store = configureStore<StoreModel>({ reducer: { launches } });
+export const store = configureStore({ reducer: { launches } });

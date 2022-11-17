@@ -1,8 +1,8 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { Route, Routes } from "react-router-dom";
 
-import { Board, Card, Header, InitComponent, NotPage } from "./components";
+import { Header, InitComponent } from "./components";
+import { Routes } from "./routes";
 
 import { store } from "./store";
 
@@ -14,12 +14,7 @@ export const App = () => {
     <Provider store={store}>
       <InitComponent />
       <Header />
-      <Routes>
-        <Route path="/" element={<Board />} />
-        <Route path="/card/:id" element={<Card />} />
-
-        <Route path="*" element={<NotPage />} />
-      </Routes>
+      <Routes />
     </Provider>
   );
 };

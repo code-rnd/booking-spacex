@@ -1,5 +1,5 @@
-import { LaunchStatuses } from "./models";
-import { LAUNCH_STATUSES } from "./sliceLaunches.const";
+import { LaunchStatuses } from "../models";
+import { LAUNCH_STATUSES } from "../constants";
 
 export const getStatusRndGen = (
   max: number = 2,
