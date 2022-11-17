@@ -1,3 +1,3 @@
-export * from "./sliceLaunches";
+export * from "./slices";
 export * from "./store";
 export * from "./hooks";

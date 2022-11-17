@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Card as AntCard, Image, Descriptions } from "antd";
 
-import { useAppSelector } from "../../../store";
+import { useAppSelector } from "../../store";
 import s from "./Card.module.scss";
 
 /** TODO: Для актуальности данных, карточку нужно фетчить при переходе в нее,

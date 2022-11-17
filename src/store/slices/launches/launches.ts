@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialState } from "./sliceLaunches.const";
-import { getAllLaunches } from "./sliceLaunches.thunks";
 
-const sliceLaunches = createSlice({
+import { initialState } from "./constants";
+import { getAllLaunches, updateLaunch } from "./thunks";
+
+const launches = createSlice({
   initialState,
   reducers: {
     setLaunches(state, action) {
@@ -27,8 +28,22 @@ const sliceLaunches = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    /** updateLaunch */
+    builder.addCase(updateLaunch.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(updateLaunch.fulfilled, (state, action) => {
+      state.launches = action.payload.launches;
+      state.isLoading = false;
+    });
+    builder.addCase(updateLaunch.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
-export const launches = sliceLaunches.reducer;
-export const { setCurrentCard, setLaunches } = sliceLaunches.actions;
+export const launchesReducer = launches.reducer;
+export const { setCurrentCard, setLaunches } = launches.actions;

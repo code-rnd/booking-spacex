@@ -2,16 +2,25 @@ import { FC, useCallback, useState, DragEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { List, Avatar } from "antd";
 
-import { LaunchModel, setCurrentCard, useAppDispatch } from "../../../store";
-import { BoardModel } from "../../../shared";
-import { useBoardsController, useBoardsNotifications } from "./hooks";
+import { initiBoards } from "../../components";
+import {
+  LaunchModel,
+  setCurrentCard,
+  updateLaunch,
+  useAppDispatch,
+  useAppSelector,
+} from "../../store";
+import { BoardModel } from "../../shared";
+import { useBoardsNotifications } from "./hooks";
 
 import s from "./Board.module.scss";
 
 export const Board: FC = () => {
   const dispatch = useAppDispatch();
+  const isLoading = useAppSelector((state) => state.launches.isLoading);
+  const launches = useAppSelector((state) => state.launches.launches);
+  const boards = initiBoards(launches);
 
-  const { updateLaunch, boards } = useBoardsController();
   const showNotification = useBoardsNotifications();
 
   const [currentBoard, setCurrentBoard] = useState<BoardModel>();
@@ -50,9 +59,10 @@ export const Board: FC = () => {
       )
         return;
 
-      updateLaunch(currentLaunch);
+      const status = currentLaunch.status === "booked" ? "available" : "booked";
+      dispatch(updateLaunch({ ...currentLaunch, status }));
     },
-    [currentBoard, currentLaunch, updateLaunch]
+    [currentBoard, currentLaunch, dispatch]
   );
 
   const dropBoardHandle = useCallback(
@@ -67,9 +77,10 @@ export const Board: FC = () => {
         return;
 
       showNotification({ currentBoard, currentLaunch, board });
-      updateLaunch(currentLaunch);
+      const status = currentLaunch.status === "booked" ? "available" : "booked";
+      updateLaunch({ ...currentLaunch, status });
     },
-    [currentLaunch, currentBoard, showNotification, updateLaunch]
+    [currentLaunch, currentBoard, showNotification, dispatch]
   );
 
   return (
@@ -85,6 +96,7 @@ export const Board: FC = () => {
             className={s.title}
           >{`${board.title} / (${board.list.length})`}</div>
           <List
+            loading={isLoading}
             itemLayout="horizontal"
             dataSource={board.list}
             renderItem={(launch) => (

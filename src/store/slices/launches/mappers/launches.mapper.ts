@@ -1,5 +1,5 @@
-import { LaunchDto, LaunchModel } from "./models";
-import { getStatusRndGen } from "./sliceLaunches.utils";
+import { LaunchDto, LaunchModel } from "../models";
+import { getStatusRndGen } from "../utils";
 
 export function mapperLaunchDtoToLaunch(data: LaunchDto[]): LaunchModel[] {
   return data.map(({ id, name, details, links }) => ({

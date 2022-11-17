@@ -1,4 +1,4 @@
-import { LaunchStatuses, SliceLaunchesStateModel } from "./models";
+import { LaunchStatuses, SliceLaunchesStateModel } from "../models";
 
 export const initialState: SliceLaunchesStateModel = {
   launches: [],
