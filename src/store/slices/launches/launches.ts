@@ -14,34 +14,34 @@ const launches = createSlice({
     },
   },
   name: "launches",
-  extraReducers: (builder) => {
+  extraReducers: {
     /** getAllLaunches */
-    builder.addCase(getAllLaunches.pending, (state) => {
+    [getAllLaunches.pending.type]: (state) => {
       state.isLoading = true;
       state.error = null;
-    });
-    builder.addCase(getAllLaunches.fulfilled, (state, action) => {
+    },
+    [getAllLaunches.fulfilled.type]: (state, action) => {
       state.launches = action.payload.launches;
       state.isLoading = false;
-    });
-    builder.addCase(getAllLaunches.rejected, (state, action) => {
+    },
+    [getAllLaunches.rejected.type]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
-    });
+    },
 
     /** updateLaunch */
-    builder.addCase(updateLaunch.pending, (state) => {
+    [updateLaunch.pending.type]: (state) => {
       state.isLoading = true;
       state.error = null;
-    });
-    builder.addCase(updateLaunch.fulfilled, (state, action) => {
+    },
+    [updateLaunch.fulfilled.type]: (state, action) => {
       state.launches = action.payload.launches;
       state.isLoading = false;
-    });
-    builder.addCase(updateLaunch.rejected, (state, action) => {
+    },
+    [updateLaunch.rejected.type]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
-    });
+    },
   },
 });
 
